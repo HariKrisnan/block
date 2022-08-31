@@ -8,7 +8,7 @@ class Post extends Component {
     super(props);
   }
   state = {
-    storageValue: "",
+    storageValue: [],
     web3: null,
     accounts: null,
     contract: null,
@@ -20,6 +20,7 @@ class Post extends Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
       const accounts = await web3.eth.getAccounts();
+      //console.log(accounts[0]);
       const Contract = truffleContract(SimpleStorageContract);
       Contract.setProvider(web3.currentProvider);
       const instance = await Contract.deployed();
@@ -35,14 +36,15 @@ class Post extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { accounts, contract } = this.state;
-    await contract.set(this.state.newValue, { from: accounts[0] });
-    const response = await contract.get();
+    await contract.write(this.state.newValue, { from: accounts[0] });
+    const response = await contract.read();
     this.setState({ storageValue: response });
+    this.setState({ newValue: "" });
   }
   runExample = async () => {
     const { contract } = this.state;
-    const response = await contract.get();
-    this.setState({ storageValue: response.toNumber() });
+    const response = await contract.read();
+    this.setState({ storageValue: response });
   };
   render() {
     if (!this.state.web3) {
@@ -50,8 +52,7 @@ class Post extends Component {
     }
     return (
       <div className="Post">
-        <h1>Welcome to Dapp!</h1>
-        <div>Filip likes:{this.state.storageValue}</div>
+        <h1>Posts</h1>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -60,6 +61,11 @@ class Post extends Component {
           />
           <input type="submit" value="Submit" />
         </form>
+        <div>
+          {this.state.storageValue.map((p) => (
+            <p>{p}</p>
+          ))}
+        </div>
       </div>
     );
   }
