@@ -36,14 +36,16 @@ class Post extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { accounts, contract } = this.state;
-    await contract.write(this.state.newValue, { from: accounts[0] });
-    const response = await contract.read();
+    await contract.write(this.state.newValue, accounts[0], {
+      from: accounts[0],
+    });
+    const response = await contract.read(accounts[0]);
     this.setState({ storageValue: response });
     this.setState({ newValue: "" });
   }
   runExample = async () => {
     const { contract } = this.state;
-    const response = await contract.read();
+    const response = await contract.read(accounts[0]);
     this.setState({ storageValue: response });
   };
   render() {
