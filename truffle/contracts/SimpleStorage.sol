@@ -17,11 +17,13 @@ contract SimpleStorage {
             j++;
         }
     }
+    return repost;
   }
 
   function write(string memory val, address own) public {
     Post memory newPost;
     newPost.value=val;
     newPost.owner=own;
+    posts.push(newPost);
   }
 }
