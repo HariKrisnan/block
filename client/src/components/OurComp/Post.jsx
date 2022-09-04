@@ -36,25 +36,35 @@ class Post extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { accounts, contract } = this.state;
-    await contract.write(this.state.newValue, accounts[0], {
+    await contract.createpost(this.state.newValue, {
       from: accounts[0],
     });
-    const response = await contract.read(accounts[0]);
-    this.setState({ storageValue: response });
+    const count = await contract.retrieve();
+    for (var i = 0; i < count; i++) {
+      const response = await contract.retrieve1(i);
+      var oldValue = this.state.storageValue;
+      oldValue.push(response);
+    }
+    var newValue = [];
+    for (var i = count - 1; i >= 0; i--) {
+      newValue[i] = oldValue[count - i - 1];
+    }
+    this.setState({ storageValue: newValue });
+    // const response = await contract.retrieveall();
+    // this.setState({ storageValue: response });
     this.setState({ newValue: "" });
   }
-  runExample = async () => {
-    const { contract } = this.state;
-    const response = await contract.read(accounts[0]);
-    this.setState({ storageValue: response });
-  };
+  // runExample = async () => {
+  //   const { contract } = this.state;
+  //   const response = await contract.read(accounts[0]);
+  //   this.setState({ storageValue: response });
+  // };
   render() {
     if (!this.state.web3) {
       return <div>Loading...</div>;
     }
     return (
-      <div className="Post">
-        <h1>Posts</h1>
+      <div className="Posts">
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -64,9 +74,15 @@ class Post extends Component {
           <input type="submit" value="Submit" />
         </form>
         <div>
-          {this.state.storageValue.map((p) => (
-            <p>{p}</p>
-          ))}
+          <h1>Posts</h1>
+          {Array.isArray(this.state.storageValue) &&
+            this.state.storageValue.map((p) => (
+              <div className="Post">
+                <p>{p}</p>
+                {/* <hr /> */}
+              </div>
+            ))}
+          {/* {this.state.storageValue} */}
         </div>
       </div>
     );

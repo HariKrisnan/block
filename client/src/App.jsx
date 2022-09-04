@@ -1,8 +1,8 @@
 import { EthProvider } from "./contexts/EthContext";
 import Navbar from "./components/OurComp/navbar";
 import Post from "./components/OurComp/Post";
-import "./App.css";
-
+// import "./App.css";
+import "./OurApp.css";
 function App() {
   return (
     <EthProvider>
