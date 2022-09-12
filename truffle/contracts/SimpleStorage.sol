@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 contract SimpleStorage {
-  // struct Post{
-  //   string value;
-  //   address owner;
-  // }
+  struct Post{
+    uint post_id;
+    string value;
+    address owner;
+    uint likes;
+  }
 
-  // Post[] posts;
+  Post[] posts;
+  uint count=0;
 
   // function read(address own) public view returns (Post[] memory) {
   //   Post[] memory repost;
@@ -26,34 +29,55 @@ contract SimpleStorage {
   //   newPost.owner=own;
   //   posts.push(newPost);
   // }
-  mapping(address => uint ) counts;
-  mapping(address => mapping(uint => string)) posts;
+  //mapping(address => uint ) counts;
+  // mapping(address => mapping(uint => string)) posts;
+
 
     function createpost(string memory _content) public {
-      uint256 a= counts[msg.sender];
-        posts[msg.sender][a] = _content;
-        counts[msg.sender]++;
+      Post memory p;
+      p.post_id=count;
+      count++;
+      p.value=_content;
+      p.owner=msg.sender;
+      p.likes=0;
+      posts.push(p);
     }
 
-      function editpost(uint a,string memory _content) public {
+    // function editpost(uint a,string memory _content) public {
     
-        posts[msg.sender][a] = _content;
+    //   posts[msg.sender][a] = _content;
       
-    }
+    // }
 
     function retrieve() public view returns (uint256){
-        return counts[msg.sender];
+      uint counter=0;
+      for(uint i=0;i<count;i++){
+        Post memory p= posts[i];
+        if(p.owner==msg.sender){
+          counter++;
+        }
+      }
+      return counter;
     }
 
     function retrieve1(uint256 a) public view returns (string memory){
-        return posts[msg.sender][a];
+      uint counter=0;
+      for(uint i=0;i<count;i++){
+        Post memory p= posts[i];
+        if(p.owner==msg.sender){
+          if(counter==a){
+            return p.value;
+          }
+          counter++;
+        }
+      }
     }
 
-    function retrieveall() public view returns(string[] memory){
-      string[] memory all;
-      for(uint i=0; i<counts[msg.sender]; i++){
-          all[i]=posts[msg.sender][i];
-      }
-      return all;
-    }
+    // function retrieveall() public view returns(string[] memory){
+    //   string[] memory all;
+    //   for(uint i=0; i<counts[msg.sender]; i++){
+    //       all[i]=posts[msg.sender][i];
+    //   }
+    //   return all;
+    // }
 }

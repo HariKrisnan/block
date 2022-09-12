@@ -56,6 +56,7 @@ class Post extends Component {
     await contract.createpost(this.state.newValue, {
       from: accounts[0],
     });
+    console.log(accounts[0]);
     this.display();
     // const response = await contract.retrieveall();
     // this.setState({ storageValue: response });
