@@ -4,9 +4,6 @@ import truffleContract from "@truffle/contract";
 import SimpleStorageContract from "../../contracts/SimpleStorage.json";
 
 class Post extends Component {
-  constructor(props) {
-    super(props);
-  }
   state = {
     storageValue: [],
     web3: null,
@@ -18,6 +15,7 @@ class Post extends Component {
     try {
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.display = this.display.bind(this);
       const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
       const accounts = await web3.eth.getAccounts();
       //console.log(accounts[0]);
@@ -25,11 +23,30 @@ class Post extends Component {
       Contract.setProvider(web3.currentProvider);
       const instance = await Contract.deployed();
       this.setState({ web3, accounts, contract: instance }, this.runExample);
+      // while (true) {
+      //   if (this.state.contract) {
+      //     this.display();
+      //     break;
+      //   }
+      // }
     } catch (error) {
       console.log(error);
     }
   };
-
+  async display() {
+    const { contract } = this.state;
+    const count = await contract.retrieve();
+    var oldValue = [];
+    for (var i = 0; i < count; i++) {
+      const response = await contract.retrieve1(i);
+      oldValue.push(response);
+    }
+    var newValue = [];
+    for (var j = count - 1; j >= 0; j--) {
+      newValue[j] = oldValue[count - j - 1];
+    }
+    this.setState({ storageValue: newValue });
+  }
   handleChange(event) {
     this.setState({ newValue: event.target.value });
   }
@@ -39,20 +56,11 @@ class Post extends Component {
     await contract.createpost(this.state.newValue, {
       from: accounts[0],
     });
-    const count = await contract.retrieve();
-    for (var i = 0; i < count; i++) {
-      const response = await contract.retrieve1(i);
-      var oldValue = this.state.storageValue;
-      oldValue.push(response);
-    }
-    var newValue = [];
-    for (var i = count - 1; i >= 0; i--) {
-      newValue[i] = oldValue[count - i - 1];
-    }
-    this.setState({ storageValue: newValue });
+    this.display();
     // const response = await contract.retrieveall();
     // this.setState({ storageValue: response });
     this.setState({ newValue: "" });
+    console.log(this.state.storageValue);
   }
   // runExample = async () => {
   //   const { contract } = this.state;
@@ -76,9 +84,9 @@ class Post extends Component {
         <div>
           <h1>Posts</h1>
           {Array.isArray(this.state.storageValue) &&
-            this.state.storageValue.map((p) => (
-              <div className="Post">
-                <p>{p}</p>
+            this.state.storageValue.map((p, index) => (
+              <div className="Post" key={index}>
+                {p}
                 {/* <hr /> */}
               </div>
             ))}
