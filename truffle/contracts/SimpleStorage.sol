@@ -60,19 +60,30 @@ contract SimpleStorage {
       return counter;
     }
 
-    function retrieve1(uint256 a) public view returns (string memory){
+    // function retrieve1(uint256 a) public view returns (string memory){
+    //   uint counter=0;
+    //   for(uint i=0;i<count;i++){
+    //     Post memory p= posts[i];
+    //     if(p.owner==msg.sender){
+    //       if(counter==a){
+    //         return p.value;
+    //       }
+    //       counter++;
+    //     }
+    //   }
+    // }
+    function retrieve1(uint256 a) public view returns (Post memory){
       uint counter=0;
       for(uint i=0;i<count;i++){
         Post memory p= posts[i];
         if(p.owner==msg.sender){
           if(counter==a){
-            return p.value;
+            return p;
           }
           counter++;
         }
       }
     }
-
     // function retrieveall() public view returns(string[] memory){
     //   string[] memory all;
     //   for(uint i=0; i<counts[msg.sender]; i++){

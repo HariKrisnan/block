@@ -5,6 +5,7 @@ import SimpleStorageContract from "../../contracts/SimpleStorage.json";
 
 class Post extends Component {
   state = {
+    posts: { id: [], value: [], likes: [], owner: [] },
     storageValue: [],
     web3: null,
     accounts: null,
@@ -24,28 +25,34 @@ class Post extends Component {
       const instance = await Contract.deployed();
       this.setState({ web3, accounts, contract: instance }, this.runExample);
       // while (true) {
-      //   if (this.state.contract) {
-      //     this.display();
-      //     break;
-      //   }
+
+      this.display();
+      // break;
       // }
     } catch (error) {
       console.log(error);
     }
   };
   async display() {
-    const { contract } = this.state;
-    const count = await contract.retrieve();
-    var oldValue = [];
-    for (var i = 0; i < count; i++) {
-      const response = await contract.retrieve1(i);
-      oldValue.push(response);
+    if (this.state.contract) {
+      const { contract } = this.state;
+      const count = await contract.retrieve();
+      var oldValue = [];
+      for (var i = 0; i < count; i++) {
+        const response = await contract.retrieve1(i);
+        this.state.posts.id.push(response.id);
+        this.state.posts.value.push(response.value);
+        this.state.posts.owner.push(response.owner);
+        this.state.posts.likes.push(response.likes);
+        oldValue.push(response.value);
+        console.log(response);
+      }
+      var newValue = [];
+      for (var j = count - 1; j >= 0; j--) {
+        newValue[j] = oldValue[count - j - 1];
+      }
+      this.setState({ storageValue: newValue });
     }
-    var newValue = [];
-    for (var j = count - 1; j >= 0; j--) {
-      newValue[j] = oldValue[count - j - 1];
-    }
-    this.setState({ storageValue: newValue });
   }
   handleChange(event) {
     this.setState({ newValue: event.target.value });
