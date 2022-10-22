@@ -5,7 +5,7 @@ import SimpleStorageContract from "../../contracts/SimpleStorage.json";
 
 class Post extends Component {
   state = {
-    posts: { id: [], value: [], likes: [], owner: [] },
+    posts: [{ id: 0, value: "", likes: 0, owner: "" }],
     storageValue: [],
     web3: null,
     accounts: null,
@@ -25,7 +25,7 @@ class Post extends Component {
       const instance = await Contract.deployed();
       this.setState({ web3, accounts, contract: instance }, this.runExample);
       // while (true) {
-
+      // this.handleChange.bind(this);
       this.display();
       // break;
       // }
@@ -35,23 +35,27 @@ class Post extends Component {
   };
   async display() {
     if (this.state.contract) {
+      var arr = [];
       const { contract } = this.state;
       const count = await contract.retrieve();
-      var oldValue = [];
       for (var i = 0; i < count; i++) {
         const response = await contract.retrieve1(i);
-        this.state.posts.id.push(response.id);
-        this.state.posts.value.push(response.value);
-        this.state.posts.owner.push(response.owner);
-        this.state.posts.likes.push(response.likes);
-        oldValue.push(response.value);
-        console.log(response);
+        var id = response.post_id;
+        var value = response.value;
+        var owner = response.owner;
+        var likes = response.likes;
+        var newVal = { id, value, likes, owner };
+        arr.push(newVal);
+        //oldValue.push(response.value);
+        //console.log(response);
       }
-      var newValue = [];
-      for (var j = count - 1; j >= 0; j--) {
-        newValue[j] = oldValue[count - j - 1];
-      }
-      this.setState({ storageValue: newValue });
+      this.state.posts = arr;
+      console.log(this.state.posts);
+      //var newValue = [];
+      // for (var j = count - 1; j >= 0; j--) {
+      //   newValue[j] = oldValue[count - j - 1];
+      // }
+      // this.setState({ storageValue: newValue });
     }
   }
   handleChange(event) {
@@ -68,7 +72,7 @@ class Post extends Component {
     // const response = await contract.retrieveall();
     // this.setState({ storageValue: response });
     this.setState({ newValue: "" });
-    console.log(this.state.storageValue);
+    //console.log(this.state.storageValue);
   }
   // runExample = async () => {
   //   const { contract } = this.state;
@@ -85,19 +89,24 @@ class Post extends Component {
           <input
             type="text"
             value={this.state.newValue}
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChange}
+            // .bind(this)
           />
           <input type="submit" value="Submit" />
         </form>
         <div>
           <h1>Posts</h1>
-          {Array.isArray(this.state.storageValue) &&
-            this.state.storageValue.map((p, index) => (
-              <div className="Post" key={index}>
-                {p}
-                {/* <hr /> */}
-              </div>
-            ))}
+          {/* {Array.isArray(this.state.posts) && */}
+          {this.state.posts.map((p, index) => (
+            <div className="Post" key={index}>
+              {p.owner}
+              <hr />
+              {p.value}
+              <hr />
+              Likes:{p.likes}
+              {/* <hr /> */}
+            </div>
+          ))}
           {/* {this.state.storageValue} */}
         </div>
       </div>
