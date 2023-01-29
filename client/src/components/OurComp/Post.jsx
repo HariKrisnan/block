@@ -37,9 +37,9 @@ class Post extends Component {
     if (this.state.contract) {
       var arr = [];
       const { contract } = this.state;
-      const count = await contract.retrieve();
+      const count = await contract.retrieve(this.state.accounts[0]);
       for (var i = 0; i < count; i++) {
-        const response = await contract.retrieve1(i);
+        const response = await contract.retrieve1(i, this.state.accounts[0]);
         var id = response.post_id;
         var value = response.value;
         var owner = response.owner;
@@ -103,7 +103,8 @@ class Post extends Component {
               <hr />
               {p.value}
               <hr />
-              Likes:{p.likes}
+              <button>Like </button>
+              {p.likes}
               {/* <hr /> */}
             </div>
           ))}
