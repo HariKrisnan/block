@@ -49,11 +49,11 @@ contract SimpleStorage {
       
     // }
 
-    function retrieve() public view returns (uint256){
+    function retrieve(address a) public view returns (uint256){
       uint counter=0;
       for(uint i=0;i<count;i++){
         Post memory p= posts[i];
-        if(p.owner==msg.sender){
+        if(p.owner==a){
           counter++;
         }
       }
@@ -72,17 +72,24 @@ contract SimpleStorage {
     //     }
     //   }
     // }
-    function retrieve1(uint256 a) public view returns (Post memory){
+    function retrieve2() public view returns (uint256){
+      return count;
+    }
+    function retrieve1(uint256 a, address add) public view returns (Post memory){
       uint counter=0;
       for(uint i=0;i<count;i++){
         Post memory p= posts[i];
-        if(p.owner==msg.sender){
+        if(p.owner==add){
           if(counter==a){
             return p;
           }
           counter++;
         }
       }
+    }
+    function retrieve3(uint256 a) public view returns (Post memory){
+        Post memory p= posts[a];
+        return p;
     }
     // function retrieveall() public view returns(string[] memory){
     //   string[] memory all;
