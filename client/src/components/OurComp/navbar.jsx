@@ -2,12 +2,19 @@ import React, { Component } from "react";
 import Web3 from "web3";
 import "bootstrap/dist/css/bootstrap.min.css";
 import contract from "@truffle/contract";
+import truffleContract from "@truffle/contract";
+import SimpleStorageContract from "../../contracts/SimpleStorage.json";
+
 class Navbar extends Component {
   componentDidMount = async () => {
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
     const accounts = await web3.eth.getAccounts();
     const { contract } = this.state;
-    const accn = await contract.giveName(accounts[0]);
+    //console.log(accounts[0]);
+    const Contract = truffleContract(SimpleStorageContract);
+    Contract.setProvider(web3.currentProvider);
+    const instance = await Contract.deployed();
+    const accn = await instance.giveName(accounts[0]);
     this.setState({
       account: accounts[0],
       name: accn,
