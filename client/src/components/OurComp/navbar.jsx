@@ -14,6 +14,7 @@ class Navbar extends Component {
     const Contract = truffleContract(SimpleStorageContract);
     Contract.setProvider(web3.currentProvider);
     const instance = await Contract.deployed();
+    await instance.setName({ from: accounts[0] });
     const accn = await instance.giveName(accounts[0]);
     this.setState({
       account: accounts[0],
@@ -41,7 +42,7 @@ class Navbar extends Component {
           </h1>
         </div>
         <h4 className="text-light" style={{ paddingRight: "20px" }}>
-          Account: {this.state.account}
+          <p style={{ paddingRight: "20px" }}>Account: {this.state.account}</p>
           Name: {this.state.name}
         </h4>
       </nav>
