@@ -85,26 +85,42 @@ class Post extends Component {
       return <div>Loading...</div>;
     }
     return (
-      <div className="Posts">
-        <form onSubmit={this.handleSubmit}>
+      <div
+        className="Posts"
+        style={{
+          paddingBottom: "20px",
+          marginTop: "50px",
+        }}
+      >
+        <form onSubmit={this.handleSubmit} style={{ alignItems: "center" }}>
           <input
             type="text"
             value={this.state.newValue}
             onChange={this.handleChange}
+            style={{ margin: "10px" }}
             // .bind(this)
           />
           <input type="submit" value="Submit" />
         </form>
-        <div>
-          <h1>Posts</h1>
+        <div style={{}}>
+          <h1 style={{ color: "blue", textAlign: "center" }}>Posts</h1>
           {/* {Array.isArray(this.state.posts) && */}
           {this.state.posts.map((p, index) => (
-            <div className="Post" key={index}>
+            <div
+              className="Post"
+              key={index}
+              style={{ borderRadius: "20px", backgroundColor: "azure" }}
+            >
               {p.owner}
               <hr />
               {p.value}
               <hr />
-              <button onClick={this.handleLike(index)}>Like </button>
+              <button
+                onClick={this.handleLike(index)}
+                style={{ borderRadius: "10px", padding: "5px", margin: "5px" }}
+              >
+                Like{" "}
+              </button>
               {p.likes}
               {/* <hr /> */}
             </div>

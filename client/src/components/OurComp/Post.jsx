@@ -95,7 +95,7 @@ class Post extends Component {
           <input type="submit" value="Submit" />
         </form>
         <div>
-          <h1>Posts</h1>
+          <h1 style={{ color: "red" }}>Posts</h1>
           {/* {Array.isArray(this.state.posts) && */}
           {this.state.posts.map((p, index) => (
             <div className="Post" key={index}>

@@ -8,9 +8,27 @@ contract SimpleStorage {
     uint likes;
   }
 
+  struct User{
+    string name;
+    // User[] followers;
+    // User[] following;
+  }
+
   Post[] posts;
   uint count=0;
 
+  mapping(address=>User) accounts;
+  address[] addresses;
+
+  function setName() public{
+  User memory user1 = User("Abc");
+  accounts[0x4ebC9c14FbA8D359D78BeAa916Ab062e1e058A4f] = user1;
+  addresses.push(0x4ebC9c14FbA8D359D78BeAa916Ab062e1e058A4f);
+  }
+
+  function giveName(address a) public view returns (string memory){
+    return accounts[a].name;
+  }
   // function read(address own) public view returns (Post[] memory) {
   //   Post[] memory repost;
   //   uint j=0;

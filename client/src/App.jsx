@@ -8,7 +8,7 @@ import "./OurApp.css";
 function App() {
   return (
     <EthProvider>
-      <div id="App">
+      <div id="App" style={{ backgroundColor: "rgba(63,200,255,0.4)" }}>
         <div>
           <Navbar />
         </div>
