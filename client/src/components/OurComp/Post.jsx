@@ -11,6 +11,8 @@ class Post extends Component {
     accounts: null,
     contract: null,
     newValue: "",
+    account: "",
+    name: "",
   };
   componentDidMount = async () => {
     try {
@@ -23,6 +25,12 @@ class Post extends Component {
       const Contract = truffleContract(SimpleStorageContract);
       Contract.setProvider(web3.currentProvider);
       const instance = await Contract.deployed();
+      await instance.setName({ from: accounts[0] });
+      const accn = await instance.giveName(accounts[0]);
+      this.setState({
+        account: accounts[0],
+        name: accn,
+      });
       this.setState({ web3, accounts, contract: instance }, this.runExample);
       // while (true) {
       // this.handleChange.bind(this);
@@ -84,7 +92,11 @@ class Post extends Component {
       return <div>Loading...</div>;
     }
     return (
-      <div className="Posts">
+      <div className="Posts" style={{ width: "100%" }}>
+        <div style={{ backgroundColor: "white", width: "100%" }}>
+          <h1>{this.state.name}</h1>
+          <h1>#{this.state.account}</h1>
+        </div>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -99,16 +111,20 @@ class Post extends Component {
           <h1 style={{ color: "blue", textAlign: "center" }}>Posts</h1>
           {/* {Array.isArray(this.state.posts) && */}
           {this.state.posts.map((p, index) => (
-            <div className="Post" 
-            key={index} 
-            style={{ borderRadius: "20px", backgroundColor: "azure" }}>
+            <div
+              className="Post"
+              key={index}
+              style={{ borderRadius: "20px", backgroundColor: "azure" }}
+            >
               {p.owner}
               <hr />
               {p.value}
               <hr />
               <button
-              style={{ borderRadius: "10px", padding: "5px", margin: "5px" }}
-              >Like </button>
+                style={{ borderRadius: "10px", padding: "5px", margin: "5px" }}
+              >
+                Like{" "}
+              </button>
               {p.likes}
               {/* <hr /> */}
             </div>

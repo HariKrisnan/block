@@ -24,6 +24,9 @@ contract SimpleStorage {
   User memory user1 = User("Abc");
   accounts[0xddf8c6799B1D1AC0b13F26E5661a5132030C37D7] = user1;
   addresses.push(0xddf8c6799B1D1AC0b13F26E5661a5132030C37D7);
+  User memory user2 = User("Def");
+  accounts[0xBAe9C3402b85f067FE09Fb7120d53aaA394Df350] = user2;
+  addresses.push(0xBAe9C3402b85f067FE09Fb7120d53aaA394Df350);
   }
 
   function giveName(address a) public view returns (string memory){
