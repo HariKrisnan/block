@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import Navbar from "./components/OurComp/navbar";
 import Post from "./components/OurComp/Post";
 import Feed from "./components/OurComp/Feed";
+import Login from "./components/OurComp/Login";
 // import "./App.css";
 import "./OurApp.css";
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <div>
             <Routes>
               <Route path="/account" element={<Post />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/" element={<Feed />} />
             </Routes>
           </div>

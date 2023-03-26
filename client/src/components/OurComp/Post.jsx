@@ -45,6 +45,7 @@ class Post extends Component {
     if (this.state.contract) {
       var arr = [];
       const { contract } = this.state;
+      const nam = await contract.giveName(this.state.accounts[0]);
       const count = await contract.retrieve(this.state.accounts[0]);
       for (var i = 0; i < count; i++) {
         const response = await contract.retrieve1(i, this.state.accounts[0]);
@@ -57,7 +58,11 @@ class Post extends Component {
         //oldValue.push(response.value);
         //console.log(response);
       }
+
       this.state.posts = arr;
+      this.state.name = nam;
+      this.setState({ nam }, this.runExample);
+      console.log(this.state.name);
       console.log(this.state.posts);
       //var newValue = [];
       // for (var j = count - 1; j >= 0; j--) {
@@ -92,10 +97,18 @@ class Post extends Component {
       return <div>Loading...</div>;
     }
     return (
-      <div className="Posts" style={{ width: "100%" }}>
-        <div style={{ backgroundColor: "white", width: "100%" }}>
-          <h1>{this.state.name}</h1>
-          <h1>#{this.state.account}</h1>
+      <div className="Posts">
+        <div style={{ paddingTop: "40px" }}>
+          <div
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "100px",
+              backgroundColor: "white",
+            }}
+          ></div>
+          <h1 style={{ paddingTop: "40px" }}>{this.state.name}</h1>
+          <p style={{ paddingRight: "20px" }}># {this.state.accounts[0]}</p>
         </div>
         <form onSubmit={this.handleSubmit}>
           <input
